@@ -41,6 +41,7 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.170.0",
     "three-globe": "^2.34.4",
+    "uuid": "^11.0.3",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

@@ -10,18 +10,9 @@ export async function POST(request) {
     jsonMockResp,
     createdBy,
     createdAt,
+    mockId,
   } = await request.json();
   await DB();
-  console.log("005");
-  console.log(
-    jsonMockResp,
-    jobDescription,
-    jobPosition,
-    yearsOfExperience,
-    createdAt,
-    createdBy
-  );
-
   await MockInterview.create({
     jobPosition,
     jobDescription,
@@ -29,15 +20,10 @@ export async function POST(request) {
     jsonMockResp,
     createdBy,
     createdAt,
+    mockId,
   });
   return NextResponse.json(
     { message: "MockInterview Created" },
     { status: 201 }
   );
-}
-
-export async function GET() {
-  await DB();
-  const mockInterviews = await MockInterview.find();
-  return NextResponse({ mockInterviews });
 }

@@ -27,7 +27,13 @@ const MockInterviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  mockId: {
+    type: String,
+    required: true,
+  },
 });
 
-export default mongoose.models.MockInterview ||
+const MockInterview =
+  mongoose.models.MockInterview ||
   mongoose.model("MockInterview", MockInterviewSchema);
+export default MockInterview;

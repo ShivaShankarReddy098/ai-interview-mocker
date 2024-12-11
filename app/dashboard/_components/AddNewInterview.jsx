@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useUser } from "@clerk/nextjs";
-import moment from "moment/moment";
+import moment from "moment";
 import { useRouter } from "next/navigation";
 import { aiRes } from "./apiChat";
 import { Button } from "@/components/ui/button";
@@ -32,26 +33,28 @@ export const AddNewInterview = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Generate mockId before the request is made
+    const newMockId = uuidv4();
+
+    // Generate AI responses for mock interview questions
     const jsonRespones = await aiRes(
       jobPosition,
       jobDescription,
       yearsOfExperience
     );
-    // console.log("Generated JSON from AI:", jsonRespones);
 
-    // Update state
+    // Set generated responses to the state
     setJsonMockResp((prev) => {
       const updatedState = [...prev, ...jsonRespones];
-      // console.log("Updated state:", updatedState);
       return updatedState;
     });
 
-    // Wait for state update before sending the POST request
+    // Use the generated mockId and the updated jsonMockResp
     const newMockResp = [...jsonMockResp, ...jsonRespones];
-    // console.log("Data being sent:", newMockResp);
 
     try {
       if (newMockResp && newMockResp.length > 0) {
+        // Send the newMockId and the mock interview data to your API
         const res = await fetch("http://localhost:3000/api/mockInterviews", {
           method: "POST",
           headers: {
@@ -61,21 +64,25 @@ export const AddNewInterview = () => {
             jobPosition,
             jobDescription,
             yearsOfExperience,
-            jsonMockResp: newMockResp, // Use the updated variable here
+            jsonMockResp: newMockResp, // Send the updated responses
             createdBy,
             createdAt,
+            mockId: newMockId, // Send the new mockId with the request
           }),
         });
 
         if (res.ok) {
           console.log("MockInterview Added Successfully");
-          router.push(`/dashboard/interview/${createdBy}`);
+
+          // Redirect to the newly created interview page using the mockId
+          router.push(`/dashboard/interview/${newMockId}`);
           setLoading(false);
           setOpenDialoag(false);
+        } else {
+          console.error("Error adding MockInterview");
         }
       } else {
-        // alert("Please Enter Mock Interview Response");
-        console.error("ERROR...");
+        console.error("ERROR: No mock responses generated");
       }
     } catch (err) {
       console.error("ERROR:", err);
@@ -139,11 +146,11 @@ export const AddNewInterview = () => {
                   <Button type="submit" disabled={loading}>
                     {loading ? (
                       <>
-                        <LoaderCircle className="animate-spin" /> "Generating
-                        from AI"
+                        <LoaderCircle className="animate-spin" /> Generating
+                        from AI...
                       </>
                     ) : (
-                      "Start Interview"
+                      <p>Start Interview</p>
                     )}
                   </Button>
                 </div>
