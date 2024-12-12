@@ -4,13 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import navImg from "@/public/logo.svg"
 
 export default function Header() {
   const path = usePathname();
   return (
     <div className="flex p-4 items-center justify-between bg-secondary shadow-md fixed w-full z-50 top-0">
       <Link href={"/"}>
-        <Image src={"/logo.svg"} width={160} height={100} alt="logo" />
+        <Image src={navImg} width={160} height={100} alt="logo" />
       </Link>
       <ul className="hidden md:flex gap-6">
         <li

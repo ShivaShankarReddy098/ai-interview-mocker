@@ -147,7 +147,7 @@ export const AddNewInterview = () => {
                     {loading ? (
                       <>
                         <LoaderCircle className="animate-spin" /> Generating
-                        from AI...
+                        Questions...
                       </>
                     ) : (
                       <p>Start Interview</p>
@@ -159,6 +159,7 @@ export const AddNewInterview = () => {
           </DialogHeader>
         </DialogContent>
       </Dialog>
+      
     </div>
   );
 };

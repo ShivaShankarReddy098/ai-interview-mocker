@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import QuestionsSection from "./_components/QuestionsSection";
+import RecordAnswerSection from "./_components/RecordAnswerSection";
 
 export default function StartInterview({ params }) {
   const [interviewData, setInterviewData] = useState(null);
@@ -46,11 +47,16 @@ export default function StartInterview({ params }) {
   return (
     <div>
       {/* Render questions and interview details */}
-      <div className="grid grid-cols-1 md:grid-cols-2 mt-36">
+      <div className="grid grid-cols-1 md:grid-cols-2 mt-36 gap-10">
         {/* Ensure mockInterviewQuestion is passed as an array of questions */}
         <QuestionsSection
           mockInterviewQuestions={mockInterviewQuestion}
           activeQuestionIndex={activeQuestionIndex}
+        />
+        <RecordAnswerSection
+          mockInterviewQuestions={mockInterviewQuestion}
+          activeQuestionIndex={activeQuestionIndex}
+          interviewData={interviewData}
         />
       </div>
     </div>
