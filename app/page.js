@@ -10,8 +10,8 @@ export default function Home() {
       <Header />
       <HomePage />
       <Features />
-      <ContactUs />
-      <Footer />
+      {/* <ContactUs /> */}
+      {/* <Footer /> */}
     </>
   );
 }

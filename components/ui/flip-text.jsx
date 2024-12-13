@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
@@ -13,10 +13,10 @@ export default function SlightFlip({
     visible: { rotateX: 0, opacity: 1 },
   },
 
-  className
+  className,
 }) {
   return (
-    (<div className="flex justify-center space-x-2">
+    <div className="flex justify-center space-x-1">
       <AnimatePresence mode="wait">
         {word.split("").map((char, i) => (
           <motion.span
@@ -26,11 +26,12 @@ export default function SlightFlip({
             exit="hidden"
             variants={framerProps}
             transition={{ duration, delay: i * delayMultiple }}
-            className={cn("origin-center drop-shadow-sm", className)}>
+            className={cn("origin-center drop-shadow-sm", className)}
+          >
             {char}
           </motion.span>
         ))}
       </AnimatePresence>
-    </div>)
+    </div>
   );
 }
