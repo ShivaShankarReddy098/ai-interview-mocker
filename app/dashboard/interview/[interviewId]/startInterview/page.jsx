@@ -22,7 +22,7 @@ export default function StartInterview({ params }) {
   const GetInterviewDetails = async () => {
     try {
       const result = await fetch(
-        `http://ai-interview-mocker-azure.vercel.app/api/mockInterviews/${mockId}`
+        `https://ai-interview-mocker-azure.vercel.app/api/mockInterviews/${mockId}`
       );
 
       if (result.ok) {

@@ -16,7 +16,7 @@ export default function Feedback({ params }) {
     try {
       console.log(mockId);
       const result = await fetch(
-        `http://ai-interview-mocker-azure.vercel.app/api/userAnswers/${mockId}`
+        `https://ai-interview-mocker-azure.vercel.app/api/userAnswers/${mockId}`
       );
       if (result.ok) {
         const userAnswer = await result.json();

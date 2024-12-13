@@ -11,7 +11,7 @@ function InterviewList() {
   const GetInterviewList = async () => {
     try {
       const result = await fetch(
-        `http://localhost:3000/api/mockInterviews/lists/${user?.primaryEmailAddress.emailAddress}`
+        `https://ai-interview-mocker-azure.vercel.app/api/mockInterviews/lists/${user?.primaryEmailAddress.emailAddress}`
       );
       if (result.ok) {
         const interviewLists = await result.json();
