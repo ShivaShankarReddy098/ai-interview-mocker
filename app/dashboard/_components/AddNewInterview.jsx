@@ -55,7 +55,7 @@ export const AddNewInterview = () => {
     try {
       if (newMockResp && newMockResp.length > 0) {
         // Send the newMockId and the mock interview data to your API
-        const res = await fetch("http://localhost:3000/api/mockInterviews", {
+        const res = await fetch("http://ai-interview-mocker-azure.vercel.app/api/mockInterviews", {
           method: "POST",
           headers: {
             "Content-type": "application/json",

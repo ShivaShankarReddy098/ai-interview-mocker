@@ -72,7 +72,7 @@ export default function RecordAnswerSection({
         const JsonFeedbackResp = JSON.parse(mockJsonResp);
 
         const userAnswerRes = await fetch(
-          "http://localhost:3000/api/userAnswer",
+          "http://ai-interview-mocker-azure.vercel.app/api/userAnswer",
           {
             method: "POST",
             headers: {
