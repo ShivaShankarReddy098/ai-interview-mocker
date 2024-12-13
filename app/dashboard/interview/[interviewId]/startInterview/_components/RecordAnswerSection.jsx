@@ -18,23 +18,35 @@ export default function RecordAnswerSection({
 }) {
   const [userAnswer, setUserAnswer] = useState("");
   const { user } = useUser();
-  const { error, isRecording, results, startSpeechToText, stopSpeechToText } =
-    useSpeechToText({
-      continuous: true,
-      useLegacyResults: false,
-    });
+  const {
+    error,
+    isRecording,
+    results,
+    startSpeechToText,
+    stopSpeechToText,
+    setResults,
+  } = useSpeechToText({
+    continuous: true,
+    useLegacyResults: false,
+  });
 
+  // Process results from speech-to-text and update userAnswer
   useEffect(() => {
-    if (results.length > 0) {
-      const latestResult = results[results.length - 1]?.transcript;
-      if (latestResult && latestResult.trim()) {
-        setUserAnswer((prev) => prev + " " + latestResult.trim());
+    console.log("Speech-to-Text Results:", results);
+    if (results?.length > 0) {
+      const latestResult = results[results.length - 1]?.transcript || "";
+      console.log("Latest Transcript:", latestResult);
+
+      if (latestResult.trim()) {
+        setUserAnswer((prev) => `${prev.trim()} ${latestResult.trim()}`.trim());
       }
     }
-
-    // Cleanup to prevent unnecessary updates
-    return () => setUserAnswer((prev) => prev);
   }, [results]);
+
+  // Debugging updated userAnswer
+  useEffect(() => {
+    console.log("Updated User Answer after state change:", userAnswer);
+  }, [userAnswer]);
 
   const SaveUserAnswer = async () => {
     if (isRecording) {
@@ -81,9 +93,9 @@ export default function RecordAnswerSection({
 
         if (userAnswerRes.ok) {
           toast.success("User Answer Saved Successfully");
+          setUserAnswer(""); // Reset the userAnswer
+          setResults([]); // Reset the results
         }
-
-        setUserAnswer(""); // Reset the userAnswer
       } catch (error) {
         toast.error("Failed to save your answer. Please try again.");
         console.error(error);
@@ -93,6 +105,7 @@ export default function RecordAnswerSection({
       startSpeechToText();
     }
   };
+
   if (error) {
     return (
       <p>
