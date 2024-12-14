@@ -51,10 +51,10 @@ export default function RecordAnswerSection({
       if (isRecording) {
         stopSpeechToText();
 
-        if (userAnswer?.trim().length < 10) {
-          toast.error("Your answer is too short. Please record again.");
-          return;
-        }
+        // if (userAnswer?.trim().length < 10) {
+        //   toast.error("Your answer is too short. Please record again.");
+        //   return;
+        // }
 
         try {
           const feedbackPrompt = `
@@ -96,15 +96,15 @@ export default function RecordAnswerSection({
             setResults([]); // Reset the results
           } else {
             toast.error("Failed to save user answer");
-            setUserAnswer(""); // Reset the userAnswer
-            setResults([]);
+            // setUserAnswer(""); // Reset the userAnswer
+            // setResults([]);
           }
         } catch (error) {
           toast.error("Failed to save your answer. Please try again.");
           console.error(error);
         }
       } else {
-        setUserAnswer(""); // Reset before starting
+        // setUserAnswer(""); // Reset before starting
         startSpeechToText();
       }
     };
