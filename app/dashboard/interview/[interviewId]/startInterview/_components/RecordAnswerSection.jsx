@@ -42,73 +42,73 @@ export default function RecordAnswerSection({
       }
     }
   }, [results]);
-  let SaveUserAnswer;
+
   // Debugging updated userAnswer
   useEffect(() => {
     console.log("Updated User Answer after state change:", userAnswer);
-
-    SaveUserAnswer = async () => {
-      if (isRecording) {
-        stopSpeechToText();
-
-        // if (userAnswer?.trim().length < 10) {
-        //   toast.error("Your answer is too short. Please record again.");
-        //   return;
-        // }
-
-        try {
-          const feedbackPrompt = `
-            Question: ${mockInterviewQuestions[activeQuestionIndex]?.question}, 
-            User Answer: ${userAnswer.trim()}, 
-            Depends on the question and user answer for the given interview question.
-            Please provide a rating (1 to 10) and feedback in JSON format, with a 'rating' field and 'feedback' field.
-          `;
-          const result = await chatSession.sendMessage(feedbackPrompt);
-          const mockJsonResp = result.response
-            .text()
-            .replace("```json", "")
-            .replace("```", "");
-          const JsonFeedbackResp = JSON.parse(mockJsonResp);
-
-          const userAnswerRes = await fetch(
-            "https://ai-interview-mocker-azure.vercel.app/api/userAnswers",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                mockId: interviewData.mockId,
-                question: mockInterviewQuestions[activeQuestionIndex]?.question,
-                correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
-                userAns: userAnswer.trim(),
-                feedback: JsonFeedbackResp?.feedback,
-                rating: JsonFeedbackResp?.rating,
-                userEmail: user?.primaryEmailAddress?.emailAddress,
-                createdAt: moment().format("DD-MM-YYYY"),
-              }),
-            }
-          );
-
-          if (userAnswerRes.ok) {
-            toast.success("User Answer Saved Successfully");
-            setUserAnswer(""); // Reset the userAnswer
-            setResults([]); // Reset the results
-          } else {
-            toast.error("Failed to save user answer");
-            // setUserAnswer(""); // Reset the userAnswer
-            // setResults([]);
-          }
-        } catch (error) {
-          toast.error("Failed to save your answer. Please try again.");
-          console.error(error);
-        }
-      } else {
-        // setUserAnswer(""); // Reset before starting
-        startSpeechToText();
-      }
-    };
   }, [userAnswer]);
+
+  const SaveUserAnswer = async () => {
+    if (isRecording) {
+      stopSpeechToText();
+
+      // if (userAnswer?.trim().length < 10) {
+      //   toast.error("Your answer is too short. Please record again.");
+      //   return;
+      // }
+
+      try {
+        const feedbackPrompt = `
+          Question: ${mockInterviewQuestions[activeQuestionIndex]?.question}, 
+          User Answer: ${userAnswer.trim()}, 
+          Depends on the question and user answer for the given interview question.
+          Please provide a rating (1 to 10) and feedback in JSON format, with a 'rating' field and 'feedback' field.
+        `;
+        const result = await chatSession.sendMessage(feedbackPrompt);
+        const mockJsonResp = result.response
+          .text()
+          .replace("```json", "")
+          .replace("```", "");
+        const JsonFeedbackResp = JSON.parse(mockJsonResp);
+
+        const userAnswerRes = await fetch(
+          "https://ai-interview-mocker-azure.vercel.app/api/userAnswers",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              mockId: interviewData.mockId,
+              question: mockInterviewQuestions[activeQuestionIndex]?.question,
+              correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
+              userAns: userAnswer.trim(),
+              feedback: JsonFeedbackResp?.feedback,
+              rating: JsonFeedbackResp?.rating,
+              userEmail: user?.primaryEmailAddress?.emailAddress,
+              createdAt: moment().format("DD-MM-YYYY"),
+            }),
+          }
+        );
+
+        if (userAnswerRes.ok) {
+          toast.success("User Answer Saved Successfully");
+          setUserAnswer(""); // Reset the userAnswer
+          setResults([]); // Reset the results
+        } else {
+          toast.error("Failed to save user answer");
+          setUserAnswer(""); // Reset the userAnswer
+          setResults([]);
+        }
+      } catch (error) {
+        toast.error("Failed to save your answer. Please try again.");
+        console.error(error);
+      }
+    } else {
+      setUserAnswer(""); // Reset before starting
+      startSpeechToText();
+    }
+  };
 
   if (error) {
     return (
