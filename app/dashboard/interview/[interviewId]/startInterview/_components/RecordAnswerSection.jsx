@@ -95,6 +95,10 @@ export default function RecordAnswerSection({
           toast.success("User Answer Saved Successfully");
           setUserAnswer(""); // Reset the userAnswer
           setResults([]); // Reset the results
+        } else {
+          toast.error("Failed to save user answer");
+          setUserAnswer(""); // Reset the userAnswer
+          setResults([]);
         }
       } catch (error) {
         toast.error("Failed to save your answer. Please try again.");
