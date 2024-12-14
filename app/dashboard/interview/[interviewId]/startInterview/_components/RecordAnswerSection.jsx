@@ -16,8 +16,8 @@ export default function RecordAnswerSection({
   activeQuestionIndex,
   interviewData,
 }) {
-  const [userAnswer, setUserAnswer] = useState("");
-  const userAnswerRef = useRef(""); // For capturing the final answer before sending
+  const [userAnswer, setUserAnswer] = useState(""); // Stores user's combined answers
+  const userAnswerRef = useRef(""); // UseRef to keep track of live updates to userAnswer
   const { user } = useUser();
 
   const {
@@ -32,7 +32,7 @@ export default function RecordAnswerSection({
     useLegacyResults: false,
   });
 
-  // Process results from speech-to-text and update userAnswer
+  // Update userAnswer in real-time from speech-to-text results
   useEffect(() => {
     console.log("Speech-to-Text Results:", results);
     if (results?.length > 0) {
@@ -40,38 +40,34 @@ export default function RecordAnswerSection({
       console.log("Latest Transcript:", latestResult);
 
       if (latestResult.trim()) {
-        setUserAnswer((prev) => {
-          const updatedAnswer = `${prev.trim()} ${latestResult.trim()}`.trim();
-          userAnswerRef.current = updatedAnswer; // Update the ref
-          return updatedAnswer;
-        });
+        // Update both state and ref for real-time accuracy
+        const updatedAnswer = `${
+          userAnswerRef.current
+        } ${latestResult.trim()}`.trim();
+        userAnswerRef.current = updatedAnswer;
+        setUserAnswer(updatedAnswer);
       }
     }
   }, [results]);
 
+  // Debugging updated userAnswer
+  useEffect(() => {
+    console.log("Updated User Answer after state change:", userAnswer);
+  }, [userAnswer]);
+
   const SaveUserAnswer = async () => {
     if (isRecording) {
-      stopSpeechToText(); // Stop recording before saving
+      stopSpeechToText(); // Stop recording if it's active
       toast.info("Recording stopped. Processing your answer...");
-    }
-
-    // Give a slight delay to ensure state updates are processed
-    setTimeout(async () => {
-      const finalAnswer = userAnswerRef.current.trim();
-      console.log("Final User Answer:", finalAnswer);
-
-      if (finalAnswer.length < 10) {
-        toast.error("Your answer is too short. Please record again.");
-        return;
-      }
-
       try {
+        // Send prompt to Gemini AI for feedback
         const feedbackPrompt = `
           Question: ${mockInterviewQuestions[activeQuestionIndex]?.question}, 
-          User Answer: ${finalAnswer}, 
-          Depends on the question and user answer for the given interview question.
-          Please provide a rating (0 to 10) and feedback in JSON format, with a 'rating' field and 'feedback' field.
+          User Answer: ${userAnswerRef.current.trim()}, 
+          Based on the user's answer, provide a JSON response with a 'rating' field (1-10) 
+          and a 'feedback' field (constructive suggestions).
         `;
+
         const result = await chatSession.sendMessage(feedbackPrompt);
         const mockJsonResp = result.response
           .text()
@@ -79,6 +75,7 @@ export default function RecordAnswerSection({
           .replace("```", "");
         const JsonFeedbackResp = JSON.parse(mockJsonResp);
 
+        // Save the user's answer and feedback to the backend
         const userAnswerRes = await fetch(
           "https://ai-interview-mocker-azure.vercel.app/api/userAnswers",
           {
@@ -90,7 +87,7 @@ export default function RecordAnswerSection({
               mockId: interviewData.mockId,
               question: mockInterviewQuestions[activeQuestionIndex]?.question,
               correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
-              userAns: finalAnswer,
+              userAns: userAnswerRef.current.trim(),
               feedback: JsonFeedbackResp?.feedback,
               rating: JsonFeedbackResp?.rating,
               userEmail: user?.primaryEmailAddress?.emailAddress,
@@ -102,17 +99,23 @@ export default function RecordAnswerSection({
         if (userAnswerRes.ok) {
           toast.success("User Answer Saved Successfully");
           setUserAnswer(""); // Reset the userAnswer
-          setResults([]); // Reset the results
-          userAnswerRef.current = ""; // Reset the ref
+          userAnswerRef.current = ""; // Reset the reference
+          setResults([]); // Reset speech-to-text results
         } else {
           toast.error("Failed to save user answer");
-          console.log("Failed to save user answer");
         }
       } catch (error) {
-        toast.error("Failed to save your answer. Please try again.");
-        console.error(error);
+        console.error("Error saving user answer:", error);
+        toast.error("An error occurred. Please try again.");
       }
-    }, 500); // Slight delay to ensure state is consistent
+    } else {
+      // Start Recording
+      setUserAnswer(""); // Reset UI state
+      userAnswerRef.current = ""; // Reset live reference
+      setResults([]); // Reset any previous results
+      startSpeechToText();
+      toast.info("Recording started. Speak now...");
+    }
   };
 
   if (error) {
@@ -127,7 +130,7 @@ export default function RecordAnswerSection({
 
   return (
     <div className="flex items-center justify-center flex-col">
-      <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg  relative">
+      <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg relative">
         <Image
           src={webImg}
           alt="camera"
