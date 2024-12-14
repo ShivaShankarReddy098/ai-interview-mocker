@@ -164,7 +164,7 @@ export default function RecordAnswerSection({
           </h2>
         )}
       </Button>
-      <p>{userAnswer || "Your answer will appear here..."}</p>
+      {/* <p>{userAnswer || "Your answer will appear here..."}</p> */}
     </div>
   );
 }
