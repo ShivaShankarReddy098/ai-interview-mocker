@@ -54,7 +54,7 @@ export default function RecordAnswerSection({
 
       if (userAnswer?.trim().length < 10) {
         toast.error("Your answer is too short. Please record again.");
-        return;
+        // return;
       }
 
       try {
