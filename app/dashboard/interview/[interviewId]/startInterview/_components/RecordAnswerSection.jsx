@@ -5,7 +5,7 @@ import webImg from "@/public/webCam1.png";
 import { Button } from "@/components/ui/button";
 import useSpeechToText from "react-hook-speech-to-text";
 import { Mic } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
 import { chatSession } from "@/utils/GeminiAIModal";
 import { useUser } from "@clerk/nextjs";
@@ -17,7 +17,9 @@ export default function RecordAnswerSection({
   interviewData,
 }) {
   const [userAnswer, setUserAnswer] = useState("");
+  const userAnswerRef = useRef(""); // For capturing the final answer before sending
   const { user } = useUser();
+
   const {
     error,
     isRecording,
@@ -38,31 +40,37 @@ export default function RecordAnswerSection({
       console.log("Latest Transcript:", latestResult);
 
       if (latestResult.trim()) {
-        setUserAnswer((prev) => `${prev.trim()} ${latestResult.trim()}`.trim());
+        setUserAnswer((prev) => {
+          const updatedAnswer = `${prev.trim()} ${latestResult.trim()}`.trim();
+          userAnswerRef.current = updatedAnswer; // Update the ref
+          return updatedAnswer;
+        });
       }
     }
   }, [results]);
 
-  // Debugging updated userAnswer
-  useEffect(() => {
-    console.log("Updated User Answer after state change:", userAnswer);
-  }, [userAnswer]);
-
   const SaveUserAnswer = async () => {
     if (isRecording) {
-      stopSpeechToText();
+      stopSpeechToText(); // Stop recording before saving
+      toast.info("Recording stopped. Processing your answer...");
+    }
 
-      // if (userAnswer?.trim().length < 10) {
-      //   toast.error("Your answer is too short. Please record again.");
-      //   return;
-      // }
+    // Give a slight delay to ensure state updates are processed
+    setTimeout(async () => {
+      const finalAnswer = userAnswerRef.current.trim();
+      console.log("Final User Answer:", finalAnswer);
+
+      if (finalAnswer.length < 10) {
+        toast.error("Your answer is too short. Please record again.");
+        return;
+      }
 
       try {
         const feedbackPrompt = `
           Question: ${mockInterviewQuestions[activeQuestionIndex]?.question}, 
-          User Answer: ${userAnswer.trim()}, 
+          User Answer: ${finalAnswer}, 
           Depends on the question and user answer for the given interview question.
-          Please provide a rating (1 to 10) and feedback in JSON format, with a 'rating' field and 'feedback' field.
+          Please provide a rating (0 to 10) and feedback in JSON format, with a 'rating' field and 'feedback' field.
         `;
         const result = await chatSession.sendMessage(feedbackPrompt);
         const mockJsonResp = result.response
@@ -82,7 +90,7 @@ export default function RecordAnswerSection({
               mockId: interviewData.mockId,
               question: mockInterviewQuestions[activeQuestionIndex]?.question,
               correctAns: mockInterviewQuestions[activeQuestionIndex]?.answer,
-              userAns: userAnswer.trim(),
+              userAns: finalAnswer,
               feedback: JsonFeedbackResp?.feedback,
               rating: JsonFeedbackResp?.rating,
               userEmail: user?.primaryEmailAddress?.emailAddress,
@@ -95,19 +103,16 @@ export default function RecordAnswerSection({
           toast.success("User Answer Saved Successfully");
           setUserAnswer(""); // Reset the userAnswer
           setResults([]); // Reset the results
+          userAnswerRef.current = ""; // Reset the ref
         } else {
           toast.error("Failed to save user answer");
-          setUserAnswer(""); // Reset the userAnswer
-          setResults([]);
+          console.log("Failed to save user answer");
         }
       } catch (error) {
         toast.error("Failed to save your answer. Please try again.");
         console.error(error);
       }
-    } else {
-      setUserAnswer(""); // Reset before starting
-      startSpeechToText();
-    }
+    }, 500); // Slight delay to ensure state is consistent
   };
 
   if (error) {
