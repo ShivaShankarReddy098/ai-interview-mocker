@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.6.3",
+    "@fortawesome/fontawesome-free": "^6.7.1",
     "@google/generative-ai": "^0.20.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",

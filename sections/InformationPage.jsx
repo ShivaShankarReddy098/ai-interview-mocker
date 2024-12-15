@@ -1,49 +1,48 @@
-import React from "react";
-
-const Features = () => {
+export default function FeaturesSection() {
   const features = [
     {
-      title: "AI-Powered Questions",
-      description: "Personalized questions based on your field and experience",
+      title: "Voice-to-Text",
+      description: "Accurate real-time voice recording.",
+      icon: "🎙️",
+    },
+    {
+      title: "AI Feedback",
+      description: "Instant feedback with AI analysis.",
       icon: "🤖",
     },
     {
-      title: "Real-time Analysis",
-      description: "Emotion and confidence tracking during your responses",
-      icon: "🎥",
+      title: "Performance Reports",
+      description: "Detailed insights to improve.",
+      icon: "📊",
     },
     {
-      title: "Detailed Feedback",
-      description: "Comprehensive analysis and improvement suggestions",
-      icon: "📊",
+      title: "Custom Questions",
+      description: "Tailored to your job role.",
+      icon: "⚙️",
     },
   ];
 
   return (
-    <section className="bg-gray-400 py-16">
-      <div className="container mx-auto px-4 text-center">
-        {/* Section Header */}
-        <h2 className="text-4xl font-bold mb-8 mt-4">
-          Why Choose InterviewAI?
+    <section className="py-16 bg-white">
+      <div className="container mx-auto px-4 text-center mb-10">
+        <h2 className="text-3xl font-bold text-gray-800 mb-10 mt-5">
+          Platform Features
         </h2>
-        {/* Feature Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="bg-white shadow-lg rounded-lg p-6 transition-transform hover:scale-105"
+              className="p-6 bg-gray-100 rounded-full flex flex-col items-center justify-center shadow-lg hover:scale-105 transition-transform"
             >
-              <div className="flex justify-center items-center text-teal-500 text-4xl mb-4">
-                <span>{feature.icon}</span>
-              </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <div className="text-5xl mb-3">{feature.icon}</div>
+              <h3 className="text-xl font-semibold">{feature.title}</h3>
+              <p className="text-gray-600 mt-2 text-sm">
+                {feature.description}
+              </p>
             </div>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
-export default Features;
+}
