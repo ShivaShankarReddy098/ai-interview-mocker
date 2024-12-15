@@ -137,7 +137,7 @@ const InterviewPage = ({ params }) => {
       </div>
 
       {/* Footer Section */}
-      <div className="flex justify-end items-end mt-2">
+      <div className="flex justify-end items-end mt-2 mb-2">
         <Link
           href={`/dashboard/interview/${params.interviewId}/startInterview`}
         >
