@@ -21,9 +21,6 @@ export default function QuestionsSection({
             mockInterviewQuestions.map((question, index) => (
               <h2
                 key={index}
-                onClick={() =>
-                  activeQuestionIndex < 10 && activeQuestionIndex + 1
-                }
                 className={`p-2 bg-secondary   rounded-full text-xs md:text-sm text-center cursor-pointer ${
                   activeQuestionIndex == index &&
                   " border-2 bg-blue-700  border-blue-700"
