@@ -5,6 +5,17 @@ import { Lightbulb, WebcamIcon } from "lucide-react";
 import Webcam from "react-webcam";
 import Link from "next/link";
 
+// Skeleton Loaders
+const SkeletonText = () => (
+  <div className="animate-pulse bg-gray-300 rounded h-4 w-full mb-3"></div>
+);
+const SkeletonBox = () => (
+  <div className="animate-pulse bg-gray-300 rounded h-24 w-full mb-5"></div>
+);
+const SkeletonWebcam = () => (
+  <div className="animate-pulse bg-gray-300 rounded-lg h-72 w-full mb-5"></div>
+);
+
 const InterviewPage = ({ params }) => {
   const mockId = params.interviewId;
   const [interviewData, setInterviewData] = useState(null);
@@ -22,7 +33,6 @@ const InterviewPage = ({ params }) => {
         const mockInterview = await result.json();
         console.log("API Response:", mockInterview);
 
-        // Handle array response
         if (Array.isArray(mockInterview) && mockInterview.length > 0) {
           setInterviewData(mockInterview[0]); // Use the first object
         } else {
@@ -44,18 +54,6 @@ const InterviewPage = ({ params }) => {
     }
   }, [mockId]);
 
-  if (loading) {
-    return <div className="text-center text-lg py-10">Loading...</div>;
-  }
-
-  if (!interviewData) {
-    return (
-      <div className="text-center text-lg py-10 text-red-500">
-        Error loading interview details. Please try again later.
-      </div>
-    );
-  }
-
   return (
     <div className="mt-28 px-4 md:px-20">
       <h2 className="font-bold text-3xl mb-10">Let's Get Started</h2>
@@ -64,18 +62,32 @@ const InterviewPage = ({ params }) => {
         <div className="flex flex-col gap-5">
           {/* Interview Details Card */}
           <div className="p-5 rounded-lg border shadow-sm">
-            <h2 className="text-lg font-semibold">
-              <strong>Job Role/Position:</strong>{" "}
-              {interviewData?.jobPosition || "N/A"}
-            </h2>
-            <h2 className="text-lg font-semibold mt-3">
-              <strong>Job Description:</strong>{" "}
-              {interviewData?.jobDescription || "N/A"}
-            </h2>
-            <h2 className="text-lg font-semibold mt-3">
-              <strong>Years of Experience:</strong>{" "}
-              {interviewData?.yearsOfExperience || "N/A"}
-            </h2>
+            {loading ? (
+              <>
+                <SkeletonText />
+                <SkeletonText />
+                <SkeletonText />
+              </>
+            ) : interviewData ? (
+              <>
+                <h2 className="text-lg font-semibold">
+                  <strong>Job Role/Position:</strong>{" "}
+                  {interviewData?.jobPosition || "N/A"}
+                </h2>
+                <h2 className="text-lg font-semibold mt-3">
+                  <strong>Job Description:</strong>{" "}
+                  {interviewData?.jobDescription || "N/A"}
+                </h2>
+                <h2 className="text-lg font-semibold mt-3">
+                  <strong>Years of Experience:</strong>{" "}
+                  {interviewData?.yearsOfExperience || "N/A"}
+                </h2>
+              </>
+            ) : (
+              <p className="text-red-500">
+                Error loading interview details. Please try again later.
+              </p>
+            )}
           </div>
 
           {/* Information Box */}
@@ -97,7 +109,9 @@ const InterviewPage = ({ params }) => {
 
         {/* Right Section */}
         <div>
-          {webcamEnabled ? (
+          {loading ? (
+            <SkeletonWebcam />
+          ) : webcamEnabled ? (
             <Webcam
               onUserMedia={() => setWebcamEnabled(true)}
               onUserMediaError={() => setWebcamEnabled(false)}
