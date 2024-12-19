@@ -8,7 +8,7 @@ export default function Feedback({ params }) {
   const [userAnswerData, setUserAnswerData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [finalRating, setFinalRating] = useState();
+  const [finalRating, setFinalRating] = useState(0);
   const router = useRouter();
 
   const mockId = params.interviewId;
@@ -18,40 +18,38 @@ export default function Feedback({ params }) {
       GetFeedback();
     }
   }, [mockId]);
+
   useEffect(() => {
-    let Rating = 0;
-    userAnswerData.map((user) => (Rating += user.Rating));
-    const finalRating = Rating / 10;
-    // setFinalRating(Rating / 10);
-    console.log(Rating);
-    setFinalRating(finalRating);
+    if (userAnswerData.length > 0) {
+      const totalRating = userAnswerData.reduce(
+        (sum, user) => sum + user.rating,
+        0
+      );
+      setFinalRating((totalRating / userAnswerData.length).toFixed(1)); // Round to 1 decimal
+    } else {
+      setFinalRating(0);
+    }
   }, [userAnswerData]);
 
   const GetFeedback = async () => {
     setLoading(true);
     setError(false);
     try {
-      console.log("Fetching feedback for mockId:", mockId);
       const result = await fetch(
         `https://ai-interview-mocker-azure.vercel.app/api/userAnswers/${mockId}`
       );
 
       if (result.ok) {
         const userAnswer = await result.json();
-        console.log("API Response for UserAnswer:", userAnswer);
-
         if (Array.isArray(userAnswer) && userAnswer.length > 0) {
           setUserAnswerData(userAnswer);
         } else {
-          console.error("Error: Response is empty or not an array.");
           setError(true);
         }
       } else {
-        console.error("Error fetching user answers. Status:", result.status);
         setError(true);
       }
     } catch (err) {
-      console.error("Error fetching user answers:", err);
       setError(true);
     } finally {
       setLoading(false);
@@ -59,7 +57,7 @@ export default function Feedback({ params }) {
   };
 
   return (
-    <div className="mt-20 p-10 h-screen z-10">
+    <div className="mt-20 p-10 h-screen">
       {/* Header */}
       <h2 className="text-3xl font-bold text-green-500">Congratulations!</h2>
       <h2 className="font-bold text-2xl mt-3">
@@ -83,15 +81,19 @@ export default function Feedback({ params }) {
           <p className="text-gray-600">
             Please check your connection or try again later.
           </p>
-          <Button onClick={GetFeedback} className="mt-4">
-            Retry
+          <Button
+            onClick={GetFeedback}
+            className={`mt-4 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading}
+          >
+            {loading ? "Retrying..." : "Retry"}
           </Button>
         </div>
       )}
 
       {/* Feedback List */}
       {!loading && !error && (
-        <>
+        <div>
           <h2 className="text-blue-700 text-lg my-3">
             Your overall interview rating: <strong>{finalRating}/10</strong>
           </h2>
@@ -103,7 +105,10 @@ export default function Feedback({ params }) {
           {userAnswerData.length > 0 ? (
             <ul className="mt-5 space-y-6">
               {userAnswerData.map((answer, index) => (
-                <li key={index} className="p-4 border rounded-md shadow-sm">
+                <li
+                  key={index}
+                  className="p-4 border rounded-md shadow-lg bg-gray-50"
+                >
                   <p>
                     <strong className="text-gray-800">Question:</strong>{" "}
                     {answer.question}
@@ -114,11 +119,11 @@ export default function Feedback({ params }) {
                   </p>
                   <p>
                     <strong className="text-gray-800">Your Answer:</strong>{" "}
-                    {answer.userAns}
+                    {answer.userAns || "No answer provided"}
                   </p>
                   <p>
                     <strong className="text-gray-800">Feedback:</strong>{" "}
-                    {answer.feedback}
+                    {answer.feedback || "No feedback available"}
                   </p>
                   <p>
                     <strong className="text-gray-800">Rating:</strong>{" "}
@@ -128,16 +133,23 @@ export default function Feedback({ params }) {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-gray-600">
-              No answers found for this interview.
+            <p className="mt-4 text-gray-600 text-center">
+              No responses were recorded for this interview. Please retry or
+              contact support.
             </p>
           )}
-        </>
+        </div>
       )}
 
-      {/* Go Home Button */}
+      {/* Navigation Buttons */}
       {!loading && !error && (
-        <div className="flex justify-end mt-10">
+        <div className="flex justify-end mt-10 space-x-4">
+          <Button
+            onClick={() => router.back()}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Go Back
+          </Button>
           <Button
             onClick={() => router.replace("/dashboard")}
             className="bg-green-600 hover:bg-green-700 text-white"
