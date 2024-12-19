@@ -83,52 +83,54 @@ export default function Feedback({ params }) {
       {/* Feedback List */}
       {!loading && !error && (
         <>
-          <h2 className="text-blue-700 text-lg my-3">
-            Your overall interview rating: <strong>7/10</strong>
-          </h2>
-          <h2 className="text-sm text-gray-500">
-            Below are the interview questions with correct answers, your
-            responses, and improvement feedback:
-          </h2>
+          <div className="h-screen">
+            <h2 className="text-blue-700 text-lg my-3">
+              Your overall interview rating: <strong>7/10</strong>
+            </h2>
+            <h2 className="text-sm text-gray-500">
+              Below are the interview questions with correct answers, your
+              responses, and improvement feedback:
+            </h2>
 
-          {userAnswerData.length > 0 ? (
-            <ul className="mt-5 space-y-6">
-              {userAnswerData.map((answer, index) => (
-                <li key={index} className="p-4 border rounded-md shadow-sm">
-                  <p>
-                    <strong className="text-gray-800">Question:</strong>{" "}
-                    {answer.question}
-                  </p>
-                  <p>
-                    <strong className="text-gray-800">Correct Answer:</strong>{" "}
-                    {answer.correctAns}
-                  </p>
-                  <p>
-                    <strong className="text-gray-800">Your Answer:</strong>{" "}
-                    {answer.userAns}
-                  </p>
-                  <p>
-                    <strong className="text-gray-800">Feedback:</strong>{" "}
-                    {answer.feedback}
-                  </p>
-                  <p>
-                    <strong className="text-gray-800">Rating:</strong>{" "}
-                    {answer.rating}/10
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-4 text-gray-600">
-              No answers found for this interview.
-            </p>
-          )}
+            {userAnswerData.length > 0 ? (
+              <ul className="mt-5 space-y-6">
+                {userAnswerData.map((answer, index) => (
+                  <li key={index} className="p-4 border rounded-md shadow-sm">
+                    <p>
+                      <strong className="text-gray-800">Question:</strong>{" "}
+                      {answer.question}
+                    </p>
+                    <p>
+                      <strong className="text-gray-800">Correct Answer:</strong>{" "}
+                      {answer.correctAns}
+                    </p>
+                    <p>
+                      <strong className="text-gray-800">Your Answer:</strong>{" "}
+                      {answer.userAns}
+                    </p>
+                    <p>
+                      <strong className="text-gray-800">Feedback:</strong>{" "}
+                      {answer.feedback}
+                    </p>
+                    <p>
+                      <strong className="text-gray-800">Rating:</strong>{" "}
+                      {answer.rating}/10
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-4 text-gray-600">
+                No answers found for this interview.
+              </p>
+            )}
+          </div>
         </>
       )}
 
       {/* Go Home Button */}
       {!loading && !error && (
-        <div className="flex justify-end mt-10">
+        <div className="flex justify-end mt-10 h-screen">
           <Button
             onClick={() => router.replace("/dashboard")}
             className="bg-green-600 hover:bg-green-700 text-white"
