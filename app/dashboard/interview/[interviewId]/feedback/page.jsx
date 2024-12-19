@@ -50,7 +50,7 @@ export default function Feedback({ params }) {
   };
 
   return (
-    <div className="mt-20 p-10">
+    <div className="mt-20 p-10 h-screen z-10">
       {/* Header */}
       <h2 className="text-3xl font-bold text-green-500">Congratulations!</h2>
       <h2 className="font-bold text-2xl mt-3">
