@@ -93,7 +93,7 @@ export default function Feedback({ params }) {
       {!loading && !error && (
         <>
           <h2 className="text-blue-700 text-lg my-3">
-            Your overall interview rating: <strong>{finalRating}</strong>
+            Your overall interview rating: <strong>{finalRating}/10</strong>
           </h2>
           <h2 className="text-sm text-gray-500">
             Below are the interview questions with correct answers, your
