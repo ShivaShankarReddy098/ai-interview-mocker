@@ -129,7 +129,7 @@ export default function RecordAnswerSection({
   }
 
   return (
-    <div className="flex items-center justify-center flex-col">
+    <div className="flex items-center justify-center flex-col h-screen">
       <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg relative">
         <Image
           src={webImg}
