@@ -25,7 +25,8 @@ export default function Feedback({ params }) {
         (sum, user) => sum + user.rating,
         0
       );
-      setFinalRating((totalRating / userAnswerData.length).toFixed(1)); // Round to 1 decimal
+      // setFinalRating((totalRating / userAnswerData.length).toFixed(1)); // Round to 1 decimal
+      setFinalRating((totalRating / 10).toFixed(1));
     } else {
       setFinalRating(0);
     }
