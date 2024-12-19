@@ -19,7 +19,7 @@ export default function Feedback({ params }) {
     }
   }, [mockId]);
   useEffect(() => {
-    const Rating = 0;
+    let Rating = 0;
     userAnswerData.map((user) => (Rating += user.Rating));
     const finalRating = Rating / 10;
     // setFinalRating(Rating / 10);
