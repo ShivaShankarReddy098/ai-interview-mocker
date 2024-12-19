@@ -8,6 +8,7 @@ export default function Feedback({ params }) {
   const [userAnswerData, setUserAnswerData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [finalRating, seFinalRating] = useState();
   const router = useRouter();
 
   const mockId = params.interviewId;
@@ -17,6 +18,13 @@ export default function Feedback({ params }) {
       GetFeedback();
     }
   }, [mockId]);
+  useEffect(() => {
+    const Rating = 0;
+    userAnswerData.map((user) => (Rating += user.Rating));
+    const finalRating = Rating / 10;
+    // setFinalRating(Rating / 10);
+    console.log(finalRating);
+  }, [userAnswerData]);
 
   const GetFeedback = async () => {
     setLoading(true);
@@ -84,7 +92,7 @@ export default function Feedback({ params }) {
       {!loading && !error && (
         <>
           <h2 className="text-blue-700 text-lg my-3">
-            Your overall interview rating: <strong>7/10</strong>
+            Your overall interview rating: <strong>{finalRating}</strong>
           </h2>
           <h2 className="text-sm text-gray-500">
             Below are the interview questions with correct answers, your
