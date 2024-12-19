@@ -25,10 +25,9 @@ export default function Feedback({ params }) {
         (sum, user) => sum + user.rating,
         0
       );
-      const averageRating = totalRating / userAnswerData.length;
-      setFinalRating(parseFloat(averageRating.toFixed(1))); // Round to 1 decimal place
+      setFinalRating((totalRating / userAnswerData.length).toFixed(1)); // Round to 1 decimal
     } else {
-      setFinalRating(0); // Default if no data
+      setFinalRating(0);
     }
   }, [userAnswerData]);
 
@@ -36,27 +35,21 @@ export default function Feedback({ params }) {
     setLoading(true);
     setError(false);
     try {
-      console.log("Fetching feedback for mockId:", mockId);
       const result = await fetch(
         `https://ai-interview-mocker-azure.vercel.app/api/userAnswers/${mockId}`
       );
 
       if (result.ok) {
         const userAnswer = await result.json();
-        console.log("API Response for UserAnswer:", userAnswer);
-
         if (Array.isArray(userAnswer) && userAnswer.length > 0) {
           setUserAnswerData(userAnswer);
         } else {
-          console.error("Error: Response is empty or not an array.");
           setError(true);
         }
       } else {
-        console.error("Error fetching user answers. Status:", result.status);
         setError(true);
       }
     } catch (err) {
-      console.error("Error fetching user answers:", err);
       setError(true);
     } finally {
       setLoading(false);
@@ -88,8 +81,12 @@ export default function Feedback({ params }) {
           <p className="text-gray-600">
             Please check your connection or try again later.
           </p>
-          <Button onClick={GetFeedback} className="mt-4">
-            Retry
+          <Button
+            onClick={GetFeedback}
+            className={`mt-4 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading}
+          >
+            {loading ? "Retrying..." : "Retry"}
           </Button>
         </div>
       )}
@@ -108,7 +105,10 @@ export default function Feedback({ params }) {
           {userAnswerData.length > 0 ? (
             <ul className="mt-5 space-y-6">
               {userAnswerData.map((answer, index) => (
-                <li key={index} className="p-4 border rounded-md shadow-sm">
+                <li
+                  key={index}
+                  className="p-4 border rounded-md shadow-lg bg-gray-50"
+                >
                   <p>
                     <strong className="text-gray-800">Question:</strong>{" "}
                     {answer.question}
@@ -119,11 +119,11 @@ export default function Feedback({ params }) {
                   </p>
                   <p>
                     <strong className="text-gray-800">Your Answer:</strong>{" "}
-                    {answer.userAns}
+                    {answer.userAns || "No answer provided"}
                   </p>
                   <p>
                     <strong className="text-gray-800">Feedback:</strong>{" "}
-                    {answer.feedback}
+                    {answer.feedback || "No feedback available"}
                   </p>
                   <p>
                     <strong className="text-gray-800">Rating:</strong>{" "}
@@ -133,16 +133,23 @@ export default function Feedback({ params }) {
               ))}
             </ul>
           ) : (
-            <p className="mt-4 text-gray-600">
-              No answers found for this interview.
+            <p className="mt-4 text-gray-600 text-center">
+              No responses were recorded for this interview. Please retry or
+              contact support.
             </p>
           )}
         </div>
       )}
 
-      {/* Go Home Button */}
+      {/* Navigation Buttons */}
       {!loading && !error && (
-        <div className="flex justify-end mt-10">
+        <div className="flex justify-end mt-10 space-x-4">
+          <Button
+            onClick={() => router.back()}
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+          >
+            Go Back
+          </Button>
           <Button
             onClick={() => router.replace("/dashboard")}
             className="bg-green-600 hover:bg-green-700 text-white"
