@@ -8,7 +8,7 @@ export default function Feedback({ params }) {
   const [userAnswerData, setUserAnswerData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [finalRating, seFinalRating] = useState();
+  const [finalRating, setFinalRating] = useState();
   const router = useRouter();
 
   const mockId = params.interviewId;
@@ -23,7 +23,8 @@ export default function Feedback({ params }) {
     userAnswerData.map((user) => (Rating += user.Rating));
     const finalRating = Rating / 10;
     // setFinalRating(Rating / 10);
-    console.log(finalRating);
+    console.log(Rating);
+    setFinalRating(finalRating);
   }, [userAnswerData]);
 
   const GetFeedback = async () => {
