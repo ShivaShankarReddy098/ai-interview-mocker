@@ -64,7 +64,7 @@ export default function StartInterview({ params }) {
   // Loading State
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center lg:h-screen">
         <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-gray-700"></div>
         <span className="ml-4 text-gray-700 text-lg">Loading Interview...</span>
       </div>
