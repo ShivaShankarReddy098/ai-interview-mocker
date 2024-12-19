@@ -22,11 +22,11 @@ export default function Feedback({ params }) {
   useEffect(() => {
     if (userAnswerData.length > 0) {
       const totalRating = userAnswerData.reduce(
-        (sum, user) => sum + user.rating,
+        (sum, user) => sum + parseInt(user.rating),
         0
       );
-      // setFinalRating((totalRating / userAnswerData.length).toFixed(1)); // Round to 1 decimal
-      setFinalRating((totalRating / 10).toFixed(1));
+      setFinalRating((totalRating / userAnswerData.length).toFixed(1)); // Round to 1 decimal
+      // setFinalRating((totalRating / 10).toFixed(1));
     } else {
       setFinalRating(0);
     }
