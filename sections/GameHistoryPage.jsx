@@ -31,10 +31,10 @@ const rewards = [
 
 export default function Gamification() {
   return (
-    <section className="bg-gray-100 py-12 px-4">
+    <section className="bg-gray-100 py-4 px-4">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-8">
-           Earn Rewards 🎮
+          Earn Rewards 🎮
         </h2>
         <p className="text-gray-600 mb-10 max-w-2xl mx-auto">
           Enhance your interview preparation experience by earning badges,

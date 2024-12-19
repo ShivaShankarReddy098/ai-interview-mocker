@@ -34,7 +34,7 @@ const tips = [
 
 export default function TipsSection() {
   return (
-    <section className="bg-gray-100 py-10 px-4">
+    <section className="bg-gray-100 py-4 px-4 mb-5">
       <div className="max-w-7xl mx-auto text-center">
         <h2 className="text-3xl font-bold text-gray-800 mb-8">
           Interview Preparation Tips

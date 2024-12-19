@@ -18,9 +18,9 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-100">
+    <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-100 mb-10">
       <div className="container mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">How It Works</h2>
+        <h2 className="text-3xl font-bold text-gray-800 mb-10">How It Works</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {steps.map((step, index) => (
             <div
