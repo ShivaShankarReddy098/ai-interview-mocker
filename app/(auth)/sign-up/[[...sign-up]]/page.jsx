@@ -32,8 +32,9 @@ export default function Page() {
             </h2>
 
             <p className="mt-4 leading-relaxed text-white/90">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-              nam dolorum aliquam, quibusdam aperiam voluptatum.
+              The AI Interview Mocker is an advanced, AI-driven platform
+              designed to help job seekers prepare for interviews with
+              confidence
             </p>
           </div>
         </section>
