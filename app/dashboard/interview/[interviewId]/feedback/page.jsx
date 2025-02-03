@@ -170,8 +170,6 @@ export default function Feedback({ params }) {
           Interview Feedback Summary
         </h2>
       </div>
-
-      {/* Loading State */}
       {loading && (
         <div className="flex flex-col items-center justify-center mt-10 space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-teal-500 border-t-transparent"></div>
