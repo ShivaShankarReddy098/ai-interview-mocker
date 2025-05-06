@@ -14,6 +14,7 @@ const EmotionDetection = ({ onEmotionChange }) => {
     width: 300,
     height: 300,
   });
+  const [isWebcamReady, setIsWebcamReady] = useState(false);
   const [emotions, setEmotions] = useState({
     neutral: 0,
     happy: 0,
@@ -52,28 +53,40 @@ const EmotionDetection = ({ onEmotionChange }) => {
     loadModels();
   }, []);
 
-  // Handle video dimensions
+  // Handle video dimensions and webcam initialization
   useEffect(() => {
     if (webcamRef.current) {
       const video = webcamRef.current.video;
-      const updateDimensions = () => {
+
+      const handleVideoReady = () => {
         if (video.videoWidth && video.videoHeight) {
           setVideoDimensions({
             width: video.videoWidth,
             height: video.videoHeight,
           });
+          setIsWebcamReady(true);
         }
       };
 
-      video.addEventListener("loadedmetadata", updateDimensions);
-      return () =>
-        video.removeEventListener("loadedmetadata", updateDimensions);
+      video.addEventListener("loadedmetadata", handleVideoReady);
+      video.addEventListener("playing", handleVideoReady);
+
+      return () => {
+        video.removeEventListener("loadedmetadata", handleVideoReady);
+        video.removeEventListener("playing", handleVideoReady);
+      };
     }
   }, []);
 
   // Process video stream
   const processVideo = async () => {
-    if (!webcamRef.current || !canvasRef.current || !isModelLoaded) return;
+    if (
+      !webcamRef.current ||
+      !canvasRef.current ||
+      !isModelLoaded ||
+      !isWebcamReady
+    )
+      return;
 
     try {
       const video = webcamRef.current.video;
@@ -137,12 +150,12 @@ const EmotionDetection = ({ onEmotionChange }) => {
     }
   };
 
-  // Start processing when model is loaded
+  // Start processing when model is loaded and webcam is ready
   useEffect(() => {
-    if (isModelLoaded) {
+    if (isModelLoaded && isWebcamReady) {
       processVideo();
     }
-  }, [isModelLoaded]);
+  }, [isModelLoaded, isWebcamReady]);
 
   if (modelError) {
     return (
@@ -157,10 +170,7 @@ const EmotionDetection = ({ onEmotionChange }) => {
   }
 
   return (
-    <div
-      className="relative"
-      style={{ width: videoDimensions.width, height: videoDimensions.height }}
-    >
+    <div className="relative w-[300px] h-[300px] bg-black rounded-lg overflow-hidden">
       <Webcam
         ref={webcamRef}
         mirrored={true}
@@ -175,6 +185,13 @@ const EmotionDetection = ({ onEmotionChange }) => {
           height: 300,
           facingMode: "user",
         }}
+        onUserMedia={() => setIsWebcamReady(true)}
+        onUserMediaError={(err) => {
+          console.error("Webcam error:", err);
+          setModelError(
+            "Failed to access webcam. Please ensure camera permissions are granted."
+          );
+        }}
       />
       <canvas
         ref={canvasRef}
@@ -182,11 +199,17 @@ const EmotionDetection = ({ onEmotionChange }) => {
           position: "absolute",
           width: "100%",
           height: "100%",
+          zIndex: 10,
         }}
       />
       {!isModelLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
           <p className="text-white">Loading emotion detection models...</p>
+        </div>
+      )}
+      {!isWebcamReady && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
+          <p className="text-white">Initializing webcam...</p>
         </div>
       )}
     </div>
