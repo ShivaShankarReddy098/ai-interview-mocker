@@ -20,6 +20,15 @@ const UserAnswerSchema = new mongoose.Schema({
   rating: {
     type: String,
   },
+  emotionalFeedback: {
+    type: String,
+  },
+  dominantEmotion: {
+    type: String,
+  },
+  emotionConfidence: {
+    type: String,
+  },
   userEmail: {
     type: String,
   },
