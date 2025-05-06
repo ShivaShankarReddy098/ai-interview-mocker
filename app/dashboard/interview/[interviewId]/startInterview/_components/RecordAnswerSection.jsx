@@ -136,13 +136,13 @@ export default function RecordAnswerSection({
   return (
     <div className="flex items-center justify-center flex-col lg:h-screen">
       <div className="flex flex-col mt-20 justify-center items-center bg-black rounded-lg relative">
-        <Image
+        {/* <Image
           src={webImg}
           alt="camera"
           width={200}
           height={200}
           className="absolute"
-        />
+        /> */}
         <div className="w-[300px] h-[300px] relative">
           <EmotionDetection onEmotionChange={handleEmotionChange} />
         </div>
