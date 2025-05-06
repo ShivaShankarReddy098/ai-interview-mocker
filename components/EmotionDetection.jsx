@@ -10,6 +10,10 @@ const EmotionDetection = ({ onEmotionChange }) => {
   const canvasRef = useRef(null);
   const [isModelLoaded, setIsModelLoaded] = useState(false);
   const [modelError, setModelError] = useState(null);
+  const [videoDimensions, setVideoDimensions] = useState({
+    width: 300,
+    height: 300,
+  });
   const [emotions, setEmotions] = useState({
     neutral: 0,
     happy: 0,
@@ -48,6 +52,25 @@ const EmotionDetection = ({ onEmotionChange }) => {
     loadModels();
   }, []);
 
+  // Handle video dimensions
+  useEffect(() => {
+    if (webcamRef.current) {
+      const video = webcamRef.current.video;
+      const updateDimensions = () => {
+        if (video.videoWidth && video.videoHeight) {
+          setVideoDimensions({
+            width: video.videoWidth,
+            height: video.videoHeight,
+          });
+        }
+      };
+
+      video.addEventListener("loadedmetadata", updateDimensions);
+      return () =>
+        video.removeEventListener("loadedmetadata", updateDimensions);
+    }
+  }, []);
+
   // Process video stream
   const processVideo = async () => {
     if (!webcamRef.current || !canvasRef.current || !isModelLoaded) return;
@@ -55,7 +78,17 @@ const EmotionDetection = ({ onEmotionChange }) => {
     try {
       const video = webcamRef.current.video;
       const canvas = canvasRef.current;
-      const displaySize = { width: video.width, height: video.height };
+
+      // Ensure video is playing and has valid dimensions
+      if (!video.videoWidth || !video.videoHeight) {
+        requestAnimationFrame(processVideo);
+        return;
+      }
+
+      const displaySize = {
+        width: video.videoWidth,
+        height: video.videoHeight,
+      };
 
       // Match canvas size with video
       faceapi.matchDimensions(canvas, displaySize);
@@ -124,7 +157,10 @@ const EmotionDetection = ({ onEmotionChange }) => {
   }
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      style={{ width: videoDimensions.width, height: videoDimensions.height }}
+    >
       <Webcam
         ref={webcamRef}
         mirrored={true}
@@ -133,6 +169,11 @@ const EmotionDetection = ({ onEmotionChange }) => {
           width: "100%",
           height: "100%",
           objectFit: "cover",
+        }}
+        videoConstraints={{
+          width: 300,
+          height: 300,
+          facingMode: "user",
         }}
       />
       <canvas
