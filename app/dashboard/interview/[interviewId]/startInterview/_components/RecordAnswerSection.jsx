@@ -10,14 +10,16 @@ import { toast } from "sonner";
 import { chatSession } from "@/utils/GeminiAIModal";
 import { useUser } from "@clerk/nextjs";
 import moment from "moment";
+import EmotionDetection from "@/components/EmotionDetection";
 
 export default function RecordAnswerSection({
   mockInterviewQuestions,
   activeQuestionIndex,
   interviewData,
 }) {
-  const [userAnswer, setUserAnswer] = useState(""); // Stores user's combined answers
-  const userAnswerRef = useRef(""); // UseRef to keep track of live updates to userAnswer
+  const [userAnswer, setUserAnswer] = useState("");
+  const userAnswerRef = useRef("");
+  const [emotionData, setEmotionData] = useState(null);
   const { user } = useUser();
 
   const {
@@ -34,13 +36,9 @@ export default function RecordAnswerSection({
 
   // Update userAnswer in real-time from speech-to-text results
   useEffect(() => {
-    console.log("Speech-to-Text Results:", results);
     if (results?.length > 0) {
       const latestResult = results[results.length - 1]?.transcript || "";
-      console.log("Latest Transcript:", latestResult);
-
       if (latestResult.trim()) {
-        // Update both state and ref for real-time accuracy
         const updatedAnswer = `${
           userAnswerRef.current
         } ${latestResult.trim()}`.trim();
@@ -50,22 +48,26 @@ export default function RecordAnswerSection({
     }
   }, [results]);
 
-  // Debugging updated userAnswer
-  useEffect(() => {
-    console.log("Updated User Answer after state change:", userAnswer);
-  }, [userAnswer]);
+  const handleEmotionChange = (emotionInfo) => {
+    setEmotionData(emotionInfo);
+  };
 
   const SaveUserAnswer = async () => {
     if (isRecording) {
-      stopSpeechToText(); // Stop recording if it's active
+      stopSpeechToText();
       toast.info("Recording stopped. Processing your answer...");
       try {
         // Send prompt to Gemini AI for feedback
         const feedbackPrompt = `
           Question: ${mockInterviewQuestions[activeQuestionIndex]?.question}, 
           User Answer: ${userAnswerRef.current.trim()}, 
-          Based on the user's answer, provide a JSON response with a 'rating' field (1-10) 
-          and a 'feedback' field (constructive suggestions).
+          User's Emotional State: ${
+            emotionData?.dominantEmotion
+          } (Confidence: ${emotionData?.confidence}),
+          Based on the user's answer and emotional state, provide a JSON response with:
+          - 'rating' field (1-10)
+          - 'feedback' field (constructive suggestions)
+          - 'emotional_feedback' field (suggestions for managing emotions during interviews)
         `;
 
         const result = await chatSession.sendMessage(feedbackPrompt);
@@ -90,6 +92,9 @@ export default function RecordAnswerSection({
               userAns: userAnswerRef.current.trim(),
               feedback: JsonFeedbackResp?.feedback,
               rating: JsonFeedbackResp?.rating,
+              emotionalFeedback: JsonFeedbackResp?.emotional_feedback,
+              dominantEmotion: emotionData?.dominantEmotion,
+              emotionConfidence: emotionData?.confidence,
               userEmail: user?.primaryEmailAddress?.emailAddress,
               createdAt: moment().format("DD-MM-YYYY"),
             }),
@@ -98,9 +103,10 @@ export default function RecordAnswerSection({
 
         if (userAnswerRes.ok) {
           toast.success("User Answer Saved Successfully");
-          setUserAnswer(""); // Reset the userAnswer
-          userAnswerRef.current = ""; // Reset the reference
-          setResults([]); // Reset speech-to-text results
+          setUserAnswer("");
+          userAnswerRef.current = "";
+          setResults([]);
+          setEmotionData(null);
         } else {
           toast.error("Failed to save user answer");
         }
@@ -109,10 +115,9 @@ export default function RecordAnswerSection({
         toast.error("An error occurred. Please try again.");
       }
     } else {
-      // Start Recording
-      setUserAnswer(""); // Reset UI state
-      userAnswerRef.current = ""; // Reset live reference
-      setResults([]); // Reset any previous results
+      setUserAnswer("");
+      userAnswerRef.current = "";
+      setResults([]);
       startSpeechToText();
       toast.info("Recording started. Speak now...");
     }
@@ -138,14 +143,9 @@ export default function RecordAnswerSection({
           height={200}
           className="absolute"
         />
-        <Webcam
-          mirrored={true}
-          style={{
-            height: 300,
-            width: "100%",
-            zIndex: 10,
-          }}
-        />
+        <div className="w-[300px] h-[300px] relative">
+          <EmotionDetection onEmotionChange={handleEmotionChange} />
+        </div>
       </div>
       <Button
         onClick={SaveUserAnswer}
@@ -164,7 +164,14 @@ export default function RecordAnswerSection({
           </h2>
         )}
       </Button>
-      {/* <p>{userAnswer || "Your answer will appear here..."}</p> */}
+      {emotionData && (
+        <div className="text-center mb-4">
+          <p className="text-sm text-gray-600">
+            Current Emotion: {emotionData.dominantEmotion}
+            (Confidence: {(emotionData.confidence * 100).toFixed(1)}%)
+          </p>
+        </div>
+      )}
     </div>
   );
 }

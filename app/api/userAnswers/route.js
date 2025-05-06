@@ -10,6 +10,9 @@ export async function POST(request) {
     userAns,
     feedback,
     rating,
+    emotionalFeedback,
+    dominantEmotion,
+    emotionConfidence,
     userEmail,
     createdAt,
   } = await request.json();
@@ -21,6 +24,9 @@ export async function POST(request) {
     userAns,
     feedback,
     rating,
+    emotionalFeedback,
+    dominantEmotion,
+    emotionConfidence,
     userEmail,
     createdAt,
   });
