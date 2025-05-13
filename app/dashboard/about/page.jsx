@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import teamImg from "@/public/team.jpg"; // You'll need to add this image
+// import teamImg from "@/public/team.jpg"; // You'll need to add this image
 
 export default function AboutPage() {
   return (
@@ -27,7 +27,12 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="relative h-[300px] rounded-lg overflow-hidden">
-            <Image src={teamImg} alt="Our Team" fill className="object-cover" />
+            <Image
+              src="https://unsplash.com/photos/group-of-people-using-laptop-computer-QckxruozjRg"
+              alt="Our Team"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
 
