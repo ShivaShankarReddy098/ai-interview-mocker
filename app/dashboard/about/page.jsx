@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
 // import teamImg from "@/public/team.jpg"; // You'll need to add this image
 
 export default function AboutPage() {
@@ -66,11 +67,11 @@ export default function AboutPage() {
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-8">Meet Our Team</h2>
           <div className="grid md:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map((member) => (
+            {["Shiva", "Dadapeer", "Madhu", "Tarun"].map((member) => (
               <div key={member} className="bg-card p-6 rounded-lg shadow-sm">
                 <div className="w-32 h-32 rounded-full bg-secondary mx-auto mb-4"></div>
-                <h3 className="font-bold mb-1">Team Member {member}</h3>
-                <p className="text-sm text-muted-foreground">Position</p>
+                <h3 className="font-bold mb-1">{member}</h3>
+                <p className="text-sm text-muted-foreground">Developer</p>
               </div>
             ))}
           </div>
@@ -83,7 +84,7 @@ export default function AboutPage() {
             Have questions? We'd love to hear from you.
           </p>
           <button className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
-            Contact Us
+            <a href="/contact">Contact Us</a>
           </button>
         </div>
       </div>
