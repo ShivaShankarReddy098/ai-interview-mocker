@@ -78,7 +78,7 @@ export default function ContactPage() {
                 </p>
                 <p>
                   <i className="fas fa-phone mr-2"></i>
-                  +91 9999999999
+                  +91 8494907891
                 </p>
                 <p>
                   <i className="fas fa-map-marker-alt mr-2"></i>
