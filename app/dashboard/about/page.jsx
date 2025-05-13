@@ -1,7 +1,7 @@
 "use client";
 // import Image from "next/image";
 // import Link from "next/link";
-import Shiva from "@/public/Shiva"; // You'll need to add this image
+import Shiva from "@/public/Shiva.jpg"; // You'll need to add this image
 
 export default function AboutPage() {
   return (
