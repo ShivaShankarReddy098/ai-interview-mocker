@@ -28,7 +28,7 @@ export default function AboutPage() {
           </div>
           <div className="relative h-[300px] rounded-lg overflow-hidden">
             <Image
-              src="https://unsplash.com/photos/group-of-people-using-laptop-computer-QckxruozjRg"
+              src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHRlYW18ZW58MHx8MHx8fDA%3D"
               alt="Our Team"
               fill
               className="object-cover"
