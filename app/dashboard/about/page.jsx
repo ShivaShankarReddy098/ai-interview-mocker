@@ -1,5 +1,5 @@
 "use client";
-// import Image from "next/image";
+import Image from "next/image";
 // import Link from "next/link";
 import Shiva from "@/public/Shiva.jpg"; // You'll need to add this image
 
