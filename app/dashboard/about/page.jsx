@@ -3,7 +3,7 @@ import Image from "next/image";
 // import Link from "next/link";
 import Shiva from "@/public/Shiva.jpg"; // You'll need to add this image
 import Dada from "@/public/Dada.jpg";
-import Madhu from "@/public/Madhu.jpg";
+import Madhu from "@/public/Madhu1.jpg";
 import Tarun from "@/public/Tarun.jpg";
 
 const team = [
