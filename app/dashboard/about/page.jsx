@@ -2,6 +2,32 @@
 import Image from "next/image";
 // import Link from "next/link";
 import Shiva from "@/public/Shiva.jpg"; // You'll need to add this image
+import Dada from "@/public/Dada.jpg";
+import Madhu from "@/public/Madhu.jpg";
+import Tarun from "@/public/Tarun.jpg";
+
+const team = [
+  {
+    name: "Shiva",
+    img: Shiva,
+    role: "Software Developer",
+  },
+  {
+    name: "Dadapeer",
+    img: Dada,
+    role: "Full Stack Developer",
+  },
+  {
+    name: "Madhu",
+    img: Madhu,
+    role: "Frontend Developer",
+  },
+  {
+    name: "Tarun",
+    img: Tarun,
+    role: "Ui/Ux Designer",
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -67,13 +93,16 @@ export default function AboutPage() {
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-8">Meet Our Team</h2>
           <div className="grid md:grid-cols-4 gap-8">
-            {["Shiva", "Dadapeer", "Madhu", "Tarun"].map((member) => (
-              <div key={member} className="bg-card p-6 rounded-lg shadow-sm">
-                <div className="w-32 h-32 rounded-full bg-secondary mx-auto mb-4">
-                  <Image src={Shiva} />
+            {team.map((member) => (
+              <div
+                key={member.name}
+                className="bg-card p-6 rounded-lg shadow-sm"
+              >
+                <div className="w-32 h-32 relative rounded-full mx-auto mb-4 overflow-hidden">
+                  <Image src={member.img} className=" object-cover" />
                 </div>
-                <h3 className="font-bold mb-1">{member}</h3>
-                <p className="text-sm text-muted-foreground">Developer</p>
+                <h3 className="font-bold mb-1">{member.name}</h3>
+                <p className="text-sm text-muted-foreground">{member.role}</p>
               </div>
             ))}
           </div>
