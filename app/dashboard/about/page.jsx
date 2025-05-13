@@ -1,7 +1,7 @@
 "use client";
 // import Image from "next/image";
 // import Link from "next/link";
-// import teamImg from "@/public/team.jpg"; // You'll need to add this image
+import Shiva from "@/public/Shiva"; // You'll need to add this image
 
 export default function AboutPage() {
   return (
@@ -69,7 +69,9 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-4 gap-8">
             {["Shiva", "Dadapeer", "Madhu", "Tarun"].map((member) => (
               <div key={member} className="bg-card p-6 rounded-lg shadow-sm">
-                <div className="w-32 h-32 rounded-full bg-secondary mx-auto mb-4"></div>
+                <div className="w-32 h-32 rounded-full bg-secondary mx-auto mb-4">
+                  <Image src={Shiva} />
+                </div>
                 <h3 className="font-bold mb-1">{member}</h3>
                 <p className="text-sm text-muted-foreground">Developer</p>
               </div>
