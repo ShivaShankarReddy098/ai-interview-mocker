@@ -104,7 +104,7 @@ export default function HowItWorksPage() {
               complexity of questions as you improve.
             </p>
             <button className="bg-primary text-primary-foreground py-2 px-6 rounded-md hover:bg-primary/90 transition-colors">
-              Start Practicing Now
+              <a href="/dashboard">Start Practicing Now</a>
             </button>
           </div>
         </div>

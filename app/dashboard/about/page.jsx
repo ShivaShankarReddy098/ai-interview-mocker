@@ -1,6 +1,6 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
+// import Image from "next/image";
+// import Link from "next/link";
 // import teamImg from "@/public/team.jpg"; // You'll need to add this image
 
 export default function AboutPage() {
@@ -28,7 +28,7 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="relative h-[300px] rounded-lg overflow-hidden">
-            <Image
+            <img
               src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHRlYW18ZW58MHx8MHx8fDA%3D"
               alt="Our Team"
               fill
@@ -84,7 +84,7 @@ export default function AboutPage() {
             Have questions? We'd love to hear from you.
           </p>
           <button className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
-            <a href="/contact">Contact Us</a>
+            <a href="/dashboard/contact">Contact Us</a>
           </button>
         </div>
       </div>

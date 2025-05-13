@@ -8,7 +8,8 @@ export default function ContactPage() {
           Contact Us
         </h1>
         <p className="text-lg text-muted-foreground text-center mb-12">
-          Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          Have questions? We'd love to hear from you. Send us a message and
+          we'll respond as soon as possible.
         </p>
 
         <div className="grid md:grid-cols-2 gap-12">
@@ -16,7 +17,10 @@ export default function ContactPage() {
           <div className="bg-card p-8 rounded-lg shadow-sm">
             <form className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium mb-2"
+                >
                   Name
                 </label>
                 <input
@@ -27,7 +31,10 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium mb-2"
+                >
                   Email
                 </label>
                 <input
@@ -38,7 +45,10 @@ export default function ContactPage() {
                 />
               </div>
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium mb-2"
+                >
                   Message
                 </label>
                 <textarea
@@ -68,13 +78,13 @@ export default function ContactPage() {
                 </p>
                 <p>
                   <i className="fas fa-phone mr-2"></i>
-                  +1 (555) 123-4567
+                  +91 9999999999
                 </p>
                 <p>
                   <i className="fas fa-map-marker-alt mr-2"></i>
                   123 Interview Street
                   <br />
-                  San Francisco, CA 94105
+                  Karnataka, India
                 </p>
               </div>
             </div>
@@ -90,13 +100,22 @@ export default function ContactPage() {
             <div>
               <h3 className="text-xl font-bold mb-4">Follow Us</h3>
               <div className="flex space-x-4">
-                <a href="#" className="text-muted-foreground hover:text-primary">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   <i className="fab fa-twitter text-2xl"></i>
                 </a>
-                <a href="#" className="text-muted-foreground hover:text-primary">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   <i className="fab fa-linkedin text-2xl"></i>
                 </a>
-                <a href="#" className="text-muted-foreground hover:text-primary">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-primary"
+                >
                   <i className="fab fa-facebook text-2xl"></i>
                 </a>
               </div>
